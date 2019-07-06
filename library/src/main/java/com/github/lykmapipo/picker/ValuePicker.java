@@ -8,4 +8,14 @@ package com.github.lykmapipo.picker;
  * @since 0.1.0
  */
 public class ValuePicker {
+
+    public interface Pickable {
+        String getId();
+
+        String getName();
+
+        String getDescription();
+
+        String getColor();
+    }
 }
