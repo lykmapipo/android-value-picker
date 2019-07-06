@@ -33,6 +33,7 @@ dependencies {
     //androidx dependencies
     implementation "androidx.annotation:annotation:${ANDROIDX_ANNOTATION_VERSION}"
     implementation "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPACT_VERSION}"
+    implementation "com.google.android.material:material:${MATERIAL_COMPONENTS_VERSION}"
 
     //test dependencies
     testImplementation "junit:junit:${JUNIT_VERSION}"
