@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Library</string>
+    <string name="tools_item_value_name">Value Name</string>
+    <string name="tools_item_value_description">Value Description</string>
 </resources>
