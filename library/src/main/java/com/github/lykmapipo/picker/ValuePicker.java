@@ -29,8 +29,6 @@ public class ValuePicker {
     // default color generator
     final ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
 
-    // internal helpers
-
     /**
      * Parse color from pickable
      *
@@ -50,7 +48,11 @@ public class ValuePicker {
         }
     }
 
-    // interface
+    /**
+     * Interface definition for a pickable value
+     *
+     * @since 0.1.0
+     */
     public interface Pickable {
         @NonNull
         String getId();
@@ -65,12 +67,18 @@ public class ValuePicker {
         String getColor();
     }
 
+    /**
+     * Interface definition for a callback to be invoked when
+     * a {@link Pickable} is clicked.
+     *
+     * @since 0.1.0
+     */
     public interface OnClickListener {
         void onClick(Pickable pickable);
     }
 
     /**
-     * Pickable {@link androidx.recyclerview.widget.RecyclerView.Adapter}
+     * A {@link androidx.recyclerview.widget.RecyclerView.Adapter} for {@link Pickable} values
      *
      * @since 0.1.0
      */
@@ -103,6 +111,9 @@ public class ValuePicker {
             return pickables.size();
         }
 
+        /**
+         * A ViewHolder for a {@link Pickable}
+         */
         class PickableViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             AppCompatImageView ivItemValueAvatar;
             AppCompatTextView tvItemValueName;
