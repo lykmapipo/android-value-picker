@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -35,11 +36,14 @@ public class ValuePicker {
      *
      * @since 0.1.0
      */
-    final ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
+    private static final ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
 
     public static synchronized void dialogPickerFor(
             @NonNull FragmentActivity activity,
             @NonNull Provider provider) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        PickableDialogFragment picker = new PickableDialogFragment(provider);
+        picker.show(fragmentManager, PickableDialogFragment.TAG);
     }
 
     public static synchronized void bottomPickerFor(
@@ -56,7 +60,7 @@ public class ValuePicker {
      * @param pickable
      * @return
      */
-    private int colorFor(@NonNull Pickable pickable) {
+    private static int colorFor(@NonNull Pickable pickable) {
         String color = pickable.getColor();
         // try parse pickable color
         try {
@@ -99,52 +103,11 @@ public class ValuePicker {
     }
 
     /**
-     * Abstract definition for a pickables provider
-     *
-     * @since 0.1.0
-     */
-    public abstract class Provider {
-        /**
-         * {@link Pickable} header
-         *
-         * @return
-         */
-        public String getTitle() {
-            return "Select A Value";
-        }
-
-        /**
-         * {@link Pickable} search hint
-         *
-         * @return
-         */
-        public String getSearchHint() {
-            return "Search...";
-        }
-
-        /**
-         * {@link Pickable} values
-         *
-         * @return
-         */
-        public abstract List<Pickable> getValues();
-
-        /**
-         * {@link Pickable} selection listener
-         *
-         * @param pickable
-         */
-        public abstract void onValueSelected(Pickable pickable);
-
-        // TODO add searchValues(String searchTerm)
-    }
-
-    /**
      * A {@link androidx.recyclerview.widget.RecyclerView.Adapter} for {@link Pickable} values
      *
      * @since 0.1.0
      */
-    class PickableAdapter extends RecyclerView.Adapter<PickableAdapter.PickableViewHolder> {
+    static class PickableAdapter extends RecyclerView.Adapter<PickableAdapter.PickableViewHolder> {
         private List<Pickable> pickables;
         private OnClickListener listener;
 
@@ -220,8 +183,8 @@ public class ValuePicker {
     /**
      * {@link DialogFragment} for {@link Pickable} values
      */
-    class PickableDialogFragment extends DialogFragment implements OnClickListener {
-        public final String TAG = PickableDialogFragment.class.getSimpleName();
+    static class PickableDialogFragment extends DialogFragment implements OnClickListener {
+        public static final String TAG = PickableDialogFragment.class.getSimpleName();
 
         private AppCompatEditText etListValuesSearch;
         private RecyclerView rvListValues;
@@ -253,9 +216,51 @@ public class ValuePicker {
 
         @Override
         public void onClick(Pickable pickable) {
+            dismiss();
             if (provider != null) {
                 provider.onValueSelected(pickable);
             }
         }
+    }
+
+    /**
+     * Abstract definition for a pickables provider
+     *
+     * @since 0.1.0
+     */
+    public abstract class Provider {
+        /**
+         * {@link Pickable} header
+         *
+         * @return
+         */
+        public String getTitle() {
+            return "Select A Value";
+        }
+
+        /**
+         * {@link Pickable} search hint
+         *
+         * @return
+         */
+        public String getSearchHint() {
+            return "Search...";
+        }
+
+        /**
+         * {@link Pickable} values
+         *
+         * @return
+         */
+        public abstract List<Pickable> getValues();
+
+        /**
+         * {@link Pickable} selection listener
+         *
+         * @param pickable
+         */
+        public abstract void onValueSelected(Pickable pickable);
+
+        // TODO add searchValues(String searchTerm)
     }
 }
