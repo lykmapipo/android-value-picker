@@ -35,4 +35,7 @@ dependencies {
 
     //androidx dependencies
     implementation "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPACT_VERSION}"
+
+    // misc dependencies
+    implementation "com.github.javafaker:javafaker:${JAVA_FAKER_VERSION}"
 }

@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -103,15 +104,52 @@ public class ValuePicker {
     }
 
     /**
+     * Interface definition for {@link Pickable} provider
+     *
+     * @since 0.1.0
+     */
+    public interface Provider {
+        /**
+         * {@link Pickable} header
+         *
+         * @return
+         */
+        String getTitle();
+
+        /**
+         * {@link Pickable} search hint
+         *
+         * @return
+         */
+        String getSearchHint();
+
+        /**
+         * {@link Pickable} values
+         *
+         * @return
+         */
+        List<? extends Pickable> getValues();
+
+        /**
+         * {@link Pickable} selection listener
+         *
+         * @param pickable
+         */
+        void onValueSelected(Pickable pickable);
+
+        // TODO add searchValues(String searchTerm)
+    }
+
+    /**
      * A {@link androidx.recyclerview.widget.RecyclerView.Adapter} for {@link Pickable} values
      *
      * @since 0.1.0
      */
     static class PickableAdapter extends RecyclerView.Adapter<PickableAdapter.PickableViewHolder> {
-        private List<Pickable> pickables;
+        private List<? extends Pickable> pickables;
         private OnClickListener listener;
 
-        public PickableAdapter(@NonNull List<Pickable> pickables, @NonNull OnClickListener listener) {
+        public PickableAdapter(@NonNull List<? extends Pickable> pickables, @NonNull OnClickListener listener) {
             this.pickables = pickables;
             this.listener = listener;
         }
@@ -206,6 +244,7 @@ public class ValuePicker {
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
+            // TODO set title
             // TODO bind search listener
 
             // bind recycler adapter & values
@@ -215,52 +254,22 @@ public class ValuePicker {
         }
 
         @Override
+        public void onStart() {
+            super.onStart();
+            try {
+                Window window = getDialog().getWindow();
+                window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+
+        @Override
         public void onClick(Pickable pickable) {
             dismiss();
             if (provider != null) {
                 provider.onValueSelected(pickable);
             }
         }
-    }
-
-    /**
-     * Abstract definition for a pickables provider
-     *
-     * @since 0.1.0
-     */
-    public abstract class Provider {
-        /**
-         * {@link Pickable} header
-         *
-         * @return
-         */
-        public String getTitle() {
-            return "Select A Value";
-        }
-
-        /**
-         * {@link Pickable} search hint
-         *
-         * @return
-         */
-        public String getSearchHint() {
-            return "Search...";
-        }
-
-        /**
-         * {@link Pickable} values
-         *
-         * @return
-         */
-        public abstract List<Pickable> getValues();
-
-        /**
-         * {@link Pickable} selection listener
-         *
-         * @param pickable
-         */
-        public abstract void onValueSelected(Pickable pickable);
-
-        // TODO add searchValues(String searchTerm)
     }
 }
