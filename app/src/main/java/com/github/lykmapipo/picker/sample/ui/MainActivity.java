@@ -51,8 +51,27 @@ public class MainActivity extends AppCompatActivity {
 
         // show bottom sheet value picker
         Button btnBottomSheetPicker = findViewById(R.id.btnBottomSheetPicker);
-        btnBottomSheetPicker.setOnClickListener(v -> {
-        });
+        btnBottomSheetPicker.setOnClickListener(v -> ValuePicker.bottomPickerFor(this, new ValuePicker.Provider() {
+            @Override
+            public String getTitle() {
+                return "Select Contact";
+            }
+
+            @Override
+            public String getSearchHint() {
+                return "Search...";
+            }
+
+            @Override
+            public List<? extends ValuePicker.Pickable> getValues() {
+                return getContactList();
+            }
+
+            @Override
+            public void onValueSelected(ValuePicker.Pickable pickable) {
+                Toast.makeText(MainActivity.this, "Picked: " + pickable, Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
 
@@ -50,6 +52,9 @@ public class ValuePicker {
     public static synchronized void bottomPickerFor(
             @NonNull FragmentActivity activity,
             @NonNull Provider provider) {
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        PickableBottomSheetDialogFragment picker = new PickableBottomSheetDialogFragment(provider);
+        picker.show(fragmentManager, PickableBottomSheetDialogFragment.TAG);
     }
 
     // TODO provide picker for fragments usage
@@ -221,7 +226,8 @@ public class ValuePicker {
     /**
      * {@link DialogFragment} for {@link Pickable} values
      */
-    static class PickableDialogFragment extends DialogFragment implements OnClickListener {
+    static class PickableDialogFragment extends AppCompatDialogFragment
+            implements OnClickListener {
         public static final String TAG = PickableDialogFragment.class.getSimpleName();
 
         private AppCompatEditText etListValuesSearch;
@@ -262,6 +268,51 @@ public class ValuePicker {
             } catch (Exception e) {
                 // ignore
             }
+        }
+
+        @Override
+        public void onClick(Pickable pickable) {
+            dismiss();
+            if (provider != null) {
+                provider.onValueSelected(pickable);
+            }
+        }
+    }
+
+    /**
+     * {@link BottomSheetDialogFragment} for {@link Pickable} values
+     */
+    static class PickableBottomSheetDialogFragment extends BottomSheetDialogFragment
+            implements OnClickListener {
+        public static final String TAG = PickableBottomSheetDialogFragment.class.getSimpleName();
+
+        private AppCompatEditText etListValuesSearch;
+        private RecyclerView rvListValues;
+        private Provider provider;
+
+        public PickableBottomSheetDialogFragment(@NonNull Provider provider) {
+            this.provider = provider;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.pickable_list, container, false);
+            etListValuesSearch = view.findViewById(R.id.etListValuesSearch);
+            rvListValues = view.findViewById(R.id.rvListValues);
+            return view;
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            // TODO set title
+            // TODO bind search listener
+
+            // bind recycler adapter & values
+            // TODO obtain value copy and handle emptiness
+            PickableAdapter adapter = new PickableAdapter(provider.getValues(), this);
+            rvListValues.setAdapter(adapter);
         }
 
         @Override
