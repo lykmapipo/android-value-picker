@@ -2,6 +2,7 @@ package com.github.lykmapipo.picker;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +48,7 @@ public class ValuePicker {
     }
 
     // TODO provide picker for fragments usage
+    // TODO handle async value providers
 
     /**
      * Parse color from pickable
@@ -131,6 +135,8 @@ public class ValuePicker {
          * @param pickable
          */
         public abstract void onValueSelected(Pickable pickable);
+
+        // TODO add searchValues(String searchTerm)
     }
 
     /**
@@ -138,11 +144,11 @@ public class ValuePicker {
      *
      * @since 0.1.0
      */
-    class PickablesAdapter extends RecyclerView.Adapter<PickablesAdapter.PickableViewHolder> {
+    class PickableAdapter extends RecyclerView.Adapter<PickableAdapter.PickableViewHolder> {
         private List<Pickable> pickables;
         private OnClickListener listener;
 
-        public PickablesAdapter(@NonNull List<Pickable> pickables, @NonNull OnClickListener listener) {
+        public PickableAdapter(@NonNull List<Pickable> pickables, @NonNull OnClickListener listener) {
             this.pickables = pickables;
             this.listener = listener;
         }
@@ -152,7 +158,7 @@ public class ValuePicker {
         public PickableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
-            View valueView = inflater.inflate(R.layout.item_value, parent, false);
+            View valueView = inflater.inflate(R.layout.pickable_item, parent, false);
             return new PickableViewHolder(valueView);
         }
 
@@ -207,6 +213,48 @@ public class ValuePicker {
                 if (listener != null) {
                     listener.onClick(pickable);
                 }
+            }
+        }
+    }
+
+    /**
+     * {@link DialogFragment} for {@link Pickable} values
+     */
+    class PickableDialogFragment extends DialogFragment implements OnClickListener {
+        public final String TAG = PickableDialogFragment.class.getSimpleName();
+
+        private AppCompatEditText etListValuesSearch;
+        private RecyclerView rvListValues;
+        private Provider provider;
+
+        public PickableDialogFragment(@NonNull Provider provider) {
+            this.provider = provider;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.pickable_list, container, false);
+            etListValuesSearch = view.findViewById(R.id.etListValuesSearch);
+            rvListValues = view.findViewById(R.id.rvListValues);
+            return view;
+        }
+
+        @Override
+        public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            // TODO bind search listener
+
+            // bind recycler adapter & values
+            // TODO obtain value copy and handle emptiness
+            PickableAdapter adapter = new PickableAdapter(provider.getValues(), this);
+            rvListValues.setAdapter(adapter);
+        }
+
+        @Override
+        public void onClick(Pickable pickable) {
+            if (provider != null) {
+                provider.onValueSelected(pickable);
             }
         }
     }
