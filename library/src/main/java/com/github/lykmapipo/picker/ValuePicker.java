@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -26,8 +27,24 @@ import java.util.List;
  * @since 0.1.0
  */
 public class ValuePicker {
-    // default color generator
+    /**
+     * Default color generator
+     *
+     * @since 0.1.0
+     */
     final ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
+
+    public static synchronized void dialogPickerFor(
+            @NonNull FragmentActivity activity,
+            @NonNull Provider provider) {
+    }
+
+    public static synchronized void bottomPickerFor(
+            @NonNull FragmentActivity activity,
+            @NonNull Provider provider) {
+    }
+
+    // TODO provide picker for fragments usage
 
     /**
      * Parse color from pickable
@@ -75,6 +92,45 @@ public class ValuePicker {
      */
     public interface OnClickListener {
         void onClick(Pickable pickable);
+    }
+
+    /**
+     * Abstract definition for a pickables provider
+     *
+     * @since 0.1.0
+     */
+    public abstract class Provider {
+        /**
+         * {@link Pickable} header
+         *
+         * @return
+         */
+        public String getTitle() {
+            return "Select A Value";
+        }
+
+        /**
+         * {@link Pickable} search hint
+         *
+         * @return
+         */
+        public String getSearchHint() {
+            return "Search...";
+        }
+
+        /**
+         * {@link Pickable} values
+         *
+         * @return
+         */
+        public abstract List<Pickable> getValues();
+
+        /**
+         * {@link Pickable} selection listener
+         *
+         * @param pickable
+         */
+        public abstract void onValueSelected(Pickable pickable);
     }
 
     /**
