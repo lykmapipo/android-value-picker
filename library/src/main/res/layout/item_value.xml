@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/flItemValue"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/material_list_two_line_normal_height">
+    android:layout_height="@dimen/material_list_two_line_normal_height"
+    android:background="?android:attr/selectableItemBackground">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivItemValueAvatar"
