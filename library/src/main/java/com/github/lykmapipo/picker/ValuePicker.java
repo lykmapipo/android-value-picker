@@ -111,9 +111,6 @@ public class ValuePicker {
         picker.show(fragmentManager, PickableBottomSheetDialogFragment.TAG);
     }
 
-    // TODO provide picker for fragments usage
-    // TODO handle async value providers
-
     /**
      * Parse color from pickable
      *
