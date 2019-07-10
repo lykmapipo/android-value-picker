@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/material_baseline_grid_1x"
-        tools:text="Oops..." />
+        android:text="@string/text_empty_state_title" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEmptyStateMessage"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/material_baseline_grid_4x"
-        tools:text="Sorry!... Something goes wrong :(" />
+        android:text="@string/text_empty_state_message" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnEmptyStateRetry"

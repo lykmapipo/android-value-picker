@@ -4,5 +4,7 @@
     <string name="tools_item_value_description">Value Description</string>
     <string name="hint_list_values_search">Search...</string>
     <string name="text_loading_state_message">Loading...</string>
+    <string name="text_empty_state_title">No Item Found</string>
+    <string name="text_empty_state_message">Save items and they will show up here.</string>
     <string name="text_empty_state_retry">Retry</string>
 </resources>
