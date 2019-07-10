@@ -188,7 +188,7 @@ public class ValuePicker {
         public PickableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
-            View valueView = inflater.inflate(R.layout.pickable_item, parent, false);
+            View valueView = inflater.inflate(R.layout.item_pickable, parent, false);
             return new PickableViewHolder(valueView);
         }
 
@@ -214,9 +214,9 @@ public class ValuePicker {
             PickableViewHolder(@NonNull View valueView) {
                 super(valueView);
                 valueView.setOnClickListener(this);
-                ivItemValueAvatar = valueView.findViewById(R.id.ivItemValueAvatar);
-                tvItemValueName = valueView.findViewById(R.id.tvItemValueName);
-                tvItemValueDescription = valueView.findViewById(R.id.tvItemValueDescription);
+                ivItemValueAvatar = valueView.findViewById(R.id.ivPickableItemAvatar);
+                tvItemValueName = valueView.findViewById(R.id.tvPickableItemName);
+                tvItemValueDescription = valueView.findViewById(R.id.tvPickableItemDescription);
             }
 
             void bindView(Pickable pickable) {
@@ -265,9 +265,9 @@ public class ValuePicker {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.pickable_list, container, false);
-            etListValuesSearch = view.findViewById(R.id.etListValuesSearch);
-            rvListValues = view.findViewById(R.id.rvListValues);
+            View view = inflater.inflate(R.layout.list_pickable, container, false);
+            etListValuesSearch = view.findViewById(R.id.etPickableListSearch);
+            rvListValues = view.findViewById(R.id.rvPickableListValues);
             return view;
         }
 
@@ -328,9 +328,9 @@ public class ValuePicker {
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.pickable_list, container, false);
-            etListValuesSearch = view.findViewById(R.id.etListValuesSearch);
-            rvListValues = view.findViewById(R.id.rvListValues);
+            View view = inflater.inflate(R.layout.list_pickable, container, false);
+            etListValuesSearch = view.findViewById(R.id.etPickableListSearch);
+            rvListValues = view.findViewById(R.id.rvPickableListValues);
             return view;
         }
 

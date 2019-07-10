@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/flItemValue"
+    android:id="@+id/flPickableItem"
     android:layout_width="match_parent"
     android:layout_height="@dimen/material_list_two_line_normal_height"
     android:background="?android:attr/selectableItemBackground">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivItemValueAvatar"
+        android:id="@+id/ivPickableItemAvatar"
         android:layout_width="@dimen/material_list_avatar_size"
         android:layout_height="@dimen/material_list_avatar_size"
         android:layout_gravity="center_vertical"
@@ -16,7 +16,7 @@
         tools:src="@drawable/tools_letter_avatar" />
 
     <LinearLayout
-        android:id="@+id/llItemValueBody"
+        android:id="@+id/llPickableItemBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -25,7 +25,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvItemValueName"
+            android:id="@+id/tvPickableItemName"
             style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             tools:text="@string/tools_item_value_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvItemValueDescription"
+            android:id="@+id/tvPickableItemDescription"
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
