@@ -36,6 +36,7 @@ import java.util.List;
  * @since 0.1.0
  */
 public class ValuePicker {
+    // TODO explore material dialog layout to improve UI/UX
     /**
      * Default color generator
      *
