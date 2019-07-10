@@ -10,11 +10,12 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivEmptyStateIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/material_baseline_grid_16x"
+        android:layout_height="@dimen/material_baseline_grid_16x"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/material_baseline_grid_2x"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:scaleType="centerCrop"
+        tools:srcCompat="@drawable/ic_empty" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEmptyStateTitle"
