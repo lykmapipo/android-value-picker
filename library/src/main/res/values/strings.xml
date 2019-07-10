@@ -4,4 +4,5 @@
     <string name="tools_item_value_description">Value Description</string>
     <string name="hint_list_values_search">Search...</string>
     <string name="text_loading_state_message">Loading...</string>
+    <string name="text_empty_state_retry">Retry</string>
 </resources>

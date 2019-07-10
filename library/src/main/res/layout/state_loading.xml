@@ -17,8 +17,7 @@
         android:layout_marginBottom="@dimen/material_baseline_grid_2x"
         android:gravity="center_horizontal"
         android:text="@string/text_loading_state_message"
-        tools:text="Loading..."
-        tools:visibility="visible" />
+        tools:text="Loading..." />
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/pbLoadingStateProgress"

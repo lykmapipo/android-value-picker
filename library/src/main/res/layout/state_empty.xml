@@ -12,40 +12,34 @@
         android:id="@+id/ivEmptyStateIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:visibility="visible" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/material_baseline_grid_2x"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEmptyStateTitle"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal"
-        tools:text="Oops..."
-        tools:visibility="visible" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/material_baseline_grid_1x"
+        tools:text="Oops..." />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEmptyStateMessage"
         style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:gravity="center_horizontal"
-        tools:text="Sorry!... Something goes wrong :("
-        tools:visibility="visible" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/material_baseline_grid_4x"
+        tools:text="Sorry!... Something goes wrong :(" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnEmptyStateRetry"
-        style="@android:style/TextAppearance.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAllCaps="false"
-        android:textColor="@android:color/black"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/text_empty_state_retry"
         android:visibility="gone"
-        tools:text="Try Again"
         tools:visibility="visible" />
 </LinearLayout>
