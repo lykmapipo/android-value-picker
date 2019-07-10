@@ -189,7 +189,7 @@ public class ValuePicker {
          *
          * @return
          */
-        List<? extends Pickable> getValues();
+        List<? extends Pickable> getValues(); // TODO use load(Filter filter) with search and paging
 
         /**
          * {@link Pickable} selection listener
@@ -197,8 +197,6 @@ public class ValuePicker {
          * @param pickable
          */
         void onValueSelected(Pickable pickable);
-
-        // TODO add searchValues(String searchTerm)
     }
 
     /**
@@ -330,7 +328,6 @@ public class ValuePicker {
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            // TODO set dialog title
             // TODO bind search listener
 
             // bind recycler adapter & values
@@ -431,7 +428,6 @@ public class ValuePicker {
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            // TODO set dialog title
             // TODO bind search listener
 
             // bind recycler adapter & values
