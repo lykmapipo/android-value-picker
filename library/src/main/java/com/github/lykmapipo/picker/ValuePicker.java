@@ -1,5 +1,6 @@
 package com.github.lykmapipo.picker;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
@@ -77,6 +79,28 @@ public class ValuePicker {
         catch (Exception e) {
             return colorGenerator.getRandomColor();
         }
+    }
+
+    private static Task<List<? extends Pickable>> wrapToTask(@NonNull Provider provider) {
+        final TaskCompletionSource<List<? extends Pickable>> source =
+                new TaskCompletionSource<List<? extends Pickable>>();
+
+        Thread fetch = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List<? extends Pickable> pickables = provider.getValues();
+                    source.setResult(pickables);
+                } catch (Exception error) {
+                    source.setException(error);
+                }
+            }
+        });
+        fetch.start();
+
+        // create get value task
+        Task<List<? extends Pickable>> task = source.getTask();
+        return task;
     }
 
     /**
@@ -226,7 +250,7 @@ public class ValuePicker {
     /**
      * {@link DialogFragment} for {@link Pickable} values
      */
-    static class PickableDialogFragment extends AppCompatDialogFragment
+    static class PickableDialogFragment extends DialogFragment
             implements OnClickListener {
         public static final String TAG = PickableDialogFragment.class.getSimpleName();
 
@@ -255,15 +279,22 @@ public class ValuePicker {
 
             // bind recycler adapter & values
             // TODO obtain value copy and handle emptiness
-            PickableAdapter adapter = new PickableAdapter(provider.getValues(), this);
-            rvListValues.setAdapter(adapter);
+            // TODO show loading state
+            // TODO show error state
+            Task<List<? extends Pickable>> task = wrapToTask(provider);
+            task.addOnSuccessListener(pickables -> {
+                PickableAdapter adapter = new PickableAdapter(pickables, this);
+                rvListValues.setAdapter(adapter);
+            });
+
         }
 
         @Override
         public void onStart() {
             super.onStart();
             try {
-                Window window = getDialog().getWindow();
+                Dialog dialog = getDialog();
+                Window window = dialog.getWindow();
                 window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             } catch (Exception e) {
                 // ignore
@@ -309,10 +340,18 @@ public class ValuePicker {
             // TODO set title
             // TODO bind search listener
 
+            // TODO set title
+            // TODO bind search listener
+
             // bind recycler adapter & values
             // TODO obtain value copy and handle emptiness
-            PickableAdapter adapter = new PickableAdapter(provider.getValues(), this);
-            rvListValues.setAdapter(adapter);
+            // TODO show loading state
+            // TODO show error state
+            Task<List<? extends Pickable>> task = wrapToTask(provider);
+            task.addOnSuccessListener(pickables -> {
+                PickableAdapter adapter = new PickableAdapter(pickables, this);
+                rvListValues.setAdapter(adapter);
+            });
         }
 
         @Override

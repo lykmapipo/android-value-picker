@@ -25,4 +25,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/pickable_item" />
 
+    <!--TODO add loading view-->
+    <!--TODO add empty view-->
+
 </LinearLayout>
