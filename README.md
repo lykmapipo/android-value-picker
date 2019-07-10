@@ -24,7 +24,7 @@ dependencies {
 
 ## Usage
 
-In activity(or other component) request for last and location updates
+In activity(or other component) request for dialog picker
 
 ```java
 public class MainActivity extends AppCompatActivity {
