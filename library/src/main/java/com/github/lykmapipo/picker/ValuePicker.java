@@ -311,6 +311,7 @@ public class ValuePicker {
 
         private StateLayout llPickableList;
         private AppCompatEditText etPickableListSearch;
+        private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
         private Provider provider;
 
@@ -347,6 +348,7 @@ public class ValuePicker {
             // obtain required views
             etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
             rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
+            etPickableListTitle = view.findViewById(R.id.etPickableListTitle);
             return view;
         }
 
@@ -354,6 +356,13 @@ public class ValuePicker {
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
             // TODO bind search listener
+
+            // set title
+            String title = provider.getTitle();
+            if (TextUtils.isEmpty(title)) {
+                title = getString(R.string.text_pickable_list_title);
+            }
+            etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
             Task<List<? extends Pickable>> task = wrapToTask(provider);
@@ -407,6 +416,7 @@ public class ValuePicker {
 
         private StateLayout llPickableList;
         private AppCompatEditText etPickableListSearch;
+        private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
         private Provider provider;
 
@@ -447,6 +457,7 @@ public class ValuePicker {
             // obtain required views
             etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
             rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
+            etPickableListTitle = view.findViewById(R.id.etPickableListTitle);
             return view;
         }
 
@@ -454,6 +465,13 @@ public class ValuePicker {
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
             // TODO bind search listener
+
+            // set title
+            String title = provider.getTitle();
+            if (TextUtils.isEmpty(title)) {
+                title = getString(R.string.text_pickable_list_title);
+            }
+            etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
             Task<List<? extends Pickable>> task = wrapToTask(provider);
