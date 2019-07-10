@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     android:background="?android:colorBackground"
     android:gravity="center"
-    android:orientation="vertical"
-    android:padding="64dp">
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivEmptyStateIcon"
@@ -20,25 +19,21 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEmptyStateTitle"
-        style="@android:style/TextAppearance.Large"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:gravity="center_horizontal"
-        android:textStyle="normal"
-        android:visibility="gone"
         tools:text="Oops..."
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEmptyStateMessage"
-        style="@android:style/TextAppearance.Medium"
+        style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:gravity="center_horizontal"
-        android:textStyle="normal"
-        android:visibility="gone"
         tools:text="Sorry!... Something goes wrong :("
         tools:visibility="visible" />
 
