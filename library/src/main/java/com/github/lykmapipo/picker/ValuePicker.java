@@ -16,6 +16,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +48,19 @@ public class ValuePicker {
     /**
      * Launch dialog picker
      *
+     * @param fragment
+     * @param provider
+     * @since 0.1.0
+     */
+    public static synchronized void dialogPickerFor(
+            @NonNull Fragment fragment,
+            @NonNull Provider provider) {
+        dialogPickerFor(fragment.getActivity(), provider);
+    }
+
+    /**
+     * Launch dialog picker
+     *
      * @param activity
      * @param provider
      * @since 0.1.0
@@ -62,6 +76,19 @@ public class ValuePicker {
         }
         picker.setProvider(provider);
         picker.show(fragmentManager, PickableDialogFragment.TAG);
+    }
+
+    /**
+     * Launch bottom sheet picker
+     *
+     * @param fragment
+     * @param provider
+     * @since 0.1.0
+     */
+    public static synchronized void bottomPickerFor(
+            @NonNull Fragment fragment,
+            @NonNull Provider provider) {
+        bottomPickerFor(fragment.getActivity(), provider);
     }
 
     /**
