@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.github.lykmapipo.picker.StateLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llPickableList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/material_baseline_grid_2x">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etPickableListSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_list_values_search"
-        android:singleLine="true"
-        android:visibility="gone"
-        tools:visibility="visible" />
+    <include
+        android:id="@+id/v_content"
+        layout="@layout/content_pickable" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPickableListValues"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/material_baseline_grid_1x"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_pickable" />
+    <include
+        android:id="@+id/v_empty"
+        layout="@layout/state_empty" />
+
+    <include
+        android:id="@+id/v_error"
+        layout="@layout/state_empty" />
+
+    <include
+        android:id="@+id/v_loading"
+        layout="@layout/state_loading" />
 
 </com.github.lykmapipo.picker.StateLayout>

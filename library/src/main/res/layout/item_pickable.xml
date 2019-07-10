@@ -32,7 +32,7 @@
             android:layout_marginBottom="@dimen/material_list_text_gutter"
             android:ellipsize="end"
             android:maxLines="1"
-            tools:text="@string/tools_item_value_name" />
+            tools:text="@string/tools_pickable_item_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvPickableItemDescription"
@@ -42,7 +42,7 @@
             android:layout_gravity="bottom"
             android:ellipsize="end"
             android:maxLines="1"
-            tools:text="@string/tools_item_value_description" />
+            tools:text="@string/tools_pickable_item_description" />
 
     </LinearLayout>
 

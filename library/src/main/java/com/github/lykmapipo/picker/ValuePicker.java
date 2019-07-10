@@ -43,19 +43,43 @@ public class ValuePicker {
      */
     private static final ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
 
+    /**
+     * Launch dialog picker
+     *
+     * @param activity
+     * @param provider
+     * @since 0.1.0
+     */
     public static synchronized void dialogPickerFor(
             @NonNull FragmentActivity activity,
             @NonNull Provider provider) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        PickableDialogFragment picker = new PickableDialogFragment(provider);
+        PickableDialogFragment picker =
+                (PickableDialogFragment) fragmentManager.findFragmentByTag(PickableDialogFragment.TAG);
+        if (null == picker) {
+            picker = PickableDialogFragment.newInstance();
+        }
+        picker.setProvider(provider);
         picker.show(fragmentManager, PickableDialogFragment.TAG);
     }
 
+    /**
+     * Launch bottom sheet picker
+     *
+     * @param activity
+     * @param provider
+     * @since 0.1.0
+     */
     public static synchronized void bottomPickerFor(
             @NonNull FragmentActivity activity,
             @NonNull Provider provider) {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        PickableBottomSheetDialogFragment picker = new PickableBottomSheetDialogFragment(provider);
+        PickableBottomSheetDialogFragment picker =
+                (PickableBottomSheetDialogFragment) fragmentManager.findFragmentByTag(PickableBottomSheetDialogFragment.TAG);
+        if (null == picker) {
+            picker = PickableBottomSheetDialogFragment.newInstance();
+        }
+        picker.setProvider(provider);
         picker.show(fragmentManager, PickableBottomSheetDialogFragment.TAG);
     }
 
@@ -81,6 +105,13 @@ public class ValuePicker {
         }
     }
 
+    /**
+     * Wrap {@link Provider#getValues()} in background thread
+     *
+     * @param provider
+     * @return
+     * @since 0.1.0
+     */
     private static Task<List<? extends Pickable>> wrapToTask(@NonNull Provider provider) {
         final TaskCompletionSource<List<? extends Pickable>> source =
                 new TaskCompletionSource<List<? extends Pickable>>();
@@ -90,6 +121,7 @@ public class ValuePicker {
             public void run() {
                 try {
                     List<? extends Pickable> pickables = provider.getValues();
+                    // TODO for each pickable item ensure drawable
                     source.setResult(pickables);
                 } catch (Exception error) {
                     source.setException(error);
@@ -254,39 +286,69 @@ public class ValuePicker {
             implements OnClickListener {
         public static final String TAG = PickableDialogFragment.class.getSimpleName();
 
-        private AppCompatEditText etListValuesSearch;
-        private RecyclerView rvListValues;
+        private StateLayout llPickableList;
+        private AppCompatEditText etPickableListSearch;
+        private RecyclerView rvPickableListValues;
         private Provider provider;
 
-        public PickableDialogFragment(@NonNull Provider provider) {
-            this.provider = provider;
+        public PickableDialogFragment() {
+            setRetainInstance(true);
+        }
+
+        /**
+         * Instantiate new dialog picker in not exists
+         *
+         * @return
+         * @since 0.1.0
+         */
+        public static PickableDialogFragment newInstance() {
+            // TODO improve picker intent
+            final Bundle args = new Bundle();
+            args.getString("ID", PickableDialogFragment.TAG);
+            final PickableDialogFragment fragment = new PickableDialogFragment();
+            fragment.setArguments(args);
+            return fragment;
         }
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.list_pickable, container, false);
-            etListValuesSearch = view.findViewById(R.id.etPickableListSearch);
-            rvListValues = view.findViewById(R.id.rvPickableListValues);
+            // setup state layout
+            llPickableList = (StateLayout) view;
+            llPickableList.setContentViewResId(R.id.v_content);
+            llPickableList.setErrorViewResId(R.id.v_error);
+            llPickableList.setEmptyViewResId(R.id.v_empty);
+            llPickableList.setLoadingViewResId(R.id.v_loading);
+
+            // obtain required views
+            etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
+            rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
             return view;
         }
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            // TODO set title
+            // TODO set dialog title
             // TODO bind search listener
 
             // bind recycler adapter & values
-            // TODO obtain value copy and handle emptiness
-            // TODO show loading state
-            // TODO show error state
             Task<List<? extends Pickable>> task = wrapToTask(provider);
-            task.addOnSuccessListener(pickables -> {
+
+            // handle loading states
+            task.addOnSuccessListener(getActivity(), pickables -> {
                 PickableAdapter adapter = new PickableAdapter(pickables, this);
-                rvListValues.setAdapter(adapter);
+                rvPickableListValues.setAdapter(adapter);
+                if (pickables.isEmpty()) {
+                    llPickableList.setState(StateLayout.VIEW_EMPTY);
+                } else {
+                    llPickableList.setState(StateLayout.VIEW_CONTENT);
+                }
             });
 
+            // handle load error
+            task.addOnFailureListener(getActivity(), e -> llPickableList.setState(StateLayout.VIEW_ERROR));
         }
 
         @Override
@@ -308,6 +370,10 @@ public class ValuePicker {
                 provider.onValueSelected(pickable);
             }
         }
+
+        public void setProvider(Provider provider) {
+            this.provider = provider;
+        }
     }
 
     /**
@@ -317,41 +383,73 @@ public class ValuePicker {
             implements OnClickListener {
         public static final String TAG = PickableBottomSheetDialogFragment.class.getSimpleName();
 
-        private AppCompatEditText etListValuesSearch;
-        private RecyclerView rvListValues;
+        private StateLayout llPickableList;
+        private AppCompatEditText etPickableListSearch;
+        private RecyclerView rvPickableListValues;
         private Provider provider;
+
+        public PickableBottomSheetDialogFragment() {
+            setRetainInstance(true);
+        }
 
         public PickableBottomSheetDialogFragment(@NonNull Provider provider) {
             this.provider = provider;
+        }
+
+        /**
+         * Instantiate new bottom sheet picker in not exists
+         *
+         * @return
+         * @since 0.1.0
+         */
+        public static PickableBottomSheetDialogFragment newInstance() {
+            // TODO improve picker intent
+            final Bundle args = new Bundle();
+            args.getString("ID", PickableBottomSheetDialogFragment.TAG);
+            final PickableBottomSheetDialogFragment fragment = new PickableBottomSheetDialogFragment();
+            fragment.setArguments(args);
+            return fragment;
         }
 
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.list_pickable, container, false);
-            etListValuesSearch = view.findViewById(R.id.etPickableListSearch);
-            rvListValues = view.findViewById(R.id.rvPickableListValues);
+            // setup state layout
+            llPickableList = (StateLayout) view;
+            llPickableList.setContentViewResId(R.id.v_content);
+            llPickableList.setErrorViewResId(R.id.v_error);
+            llPickableList.setEmptyViewResId(R.id.v_empty);
+            llPickableList.setLoadingViewResId(R.id.v_loading);
+
+            // obtain required views
+            etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
+            rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
             return view;
         }
 
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            // TODO set title
-            // TODO bind search listener
-
-            // TODO set title
+            // TODO set dialog title
             // TODO bind search listener
 
             // bind recycler adapter & values
-            // TODO obtain value copy and handle emptiness
-            // TODO show loading state
-            // TODO show error state
             Task<List<? extends Pickable>> task = wrapToTask(provider);
-            task.addOnSuccessListener(pickables -> {
+
+            // handle loading states
+            task.addOnSuccessListener(getActivity(), pickables -> {
                 PickableAdapter adapter = new PickableAdapter(pickables, this);
-                rvListValues.setAdapter(adapter);
+                rvPickableListValues.setAdapter(adapter);
+                if (pickables.isEmpty()) {
+                    llPickableList.setState(StateLayout.VIEW_EMPTY);
+                } else {
+                    llPickableList.setState(StateLayout.VIEW_CONTENT);
+                }
             });
+
+            // handle load error
+            task.addOnFailureListener(getActivity(), e -> llPickableList.setState(StateLayout.VIEW_ERROR));
         }
 
         @Override
@@ -361,5 +459,10 @@ public class ValuePicker {
                 provider.onValueSelected(pickable);
             }
         }
+
+        public void setProvider(Provider provider) {
+            this.provider = provider;
+        }
+
     }
 }

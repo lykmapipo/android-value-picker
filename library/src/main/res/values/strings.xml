@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Library</string>
-    <string name="tools_item_value_name">Value Name</string>
-    <string name="tools_item_value_description">Value Description</string>
+    <string name="tools_pickable_item_name">Value Name</string>
+    <string name="tools_pickable_item_description">Value Description</string>
     <string name="hint_list_values_search">Search...</string>
+    <string name="text_pickable_list_title">Select Item</string>
     <string name="text_loading_state_message">Loading...</string>
     <string name="text_empty_state_title">No Item Found</string>
     <string name="text_empty_state_message">Save items and they will show up here.</string>
