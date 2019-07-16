@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
+import com.github.lykmapipo.listview.adapter.DiffableListAdapter;
+import com.github.lykmapipo.listview.data.Diffable;
 import com.github.lykmapipo.listview.view.StateLayout;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
@@ -151,7 +153,7 @@ public class ValuePicker {
                 // execute task
                 try {
                     List<? extends Pickable> pickables = provider.getValues();
-                    // TODO for each pickable item ensure drawable
+                    // TODO for each pickable item ensure drawable avatar
                     source.setResult(pickables);
                 } catch (Exception error) {
                     source.setException(error);
@@ -170,7 +172,7 @@ public class ValuePicker {
      *
      * @since 0.1.0
      */
-    public interface Pickable {
+    public interface Pickable extends Diffable {
         @NonNull
         String getId();
 
@@ -219,7 +221,7 @@ public class ValuePicker {
          *
          * @return
          */
-        List<? extends Pickable> getValues(); // TODO use load(Filter filter) with search and paging
+        List<? extends Pickable> getValues(); // TODO use load(Query query) with search and paging
 
         /**
          * {@link Pickable} selection listener
@@ -230,16 +232,15 @@ public class ValuePicker {
     }
 
     /**
-     * A {@link androidx.recyclerview.widget.RecyclerView.Adapter} for {@link Pickable} values
+     * A {@link DiffableListAdapter} for {@link Pickable} values
      *
      * @since 0.1.0
      */
-    static class PickableAdapter extends RecyclerView.Adapter<PickableAdapter.PickableViewHolder> {
-        private List<? extends Pickable> pickables;
+    static class PickableAdapter extends DiffableListAdapter<Pickable, PickableAdapter.PickableViewHolder> {
         private OnClickListener listener;
 
-        public PickableAdapter(@NonNull List<? extends Pickable> pickables, @NonNull OnClickListener listener) {
-            this.pickables = pickables;
+        public PickableAdapter(@NonNull OnClickListener listener) {
+            super();
             this.listener = listener;
         }
 
@@ -254,13 +255,8 @@ public class ValuePicker {
 
         @Override
         public void onBindViewHolder(@NonNull PickableViewHolder pickableViewHolder, int position) {
-            Pickable pickable = pickables.get(position);
-            pickableViewHolder.bindView(pickable);
-        }
-
-        @Override
-        public int getItemCount() {
-            return pickables.size();
+            Pickable pickable = getItem(position);
+            pickableViewHolder.bind(pickable);
         }
 
         /**
@@ -279,7 +275,7 @@ public class ValuePicker {
                 tvItemValueDescription = valueView.findViewById(R.id.tvPickableItemDescription);
             }
 
-            void bindView(Pickable pickable) {
+            void bind(Pickable pickable) {
                 String name = pickable.getName();
                 String description = pickable.getDescription();
                 String letter = String.valueOf(name.charAt(0));
@@ -299,7 +295,7 @@ public class ValuePicker {
 
             @Override
             public void onClick(View v) {
-                Pickable pickable = pickables.get(getAdapterPosition());
+                Pickable pickable = getItem(getAdapterPosition());
                 if (listener != null) {
                     listener.onClick(pickable);
                 }
@@ -319,6 +315,7 @@ public class ValuePicker {
         private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
         private Provider provider;
+        private PickableAdapter adapter;
 
         public PickableDialogFragment() {
             setRetainInstance(true);
@@ -354,6 +351,12 @@ public class ValuePicker {
             etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
             rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
             etPickableListTitle = view.findViewById(R.id.etPickableListTitle);
+
+            // bind adapters
+            adapter = new PickableAdapter(this);
+            rvPickableListValues.setAdapter(adapter);
+
+            // return views
             return view;
         }
 
@@ -374,11 +377,10 @@ public class ValuePicker {
 
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
-                PickableAdapter adapter = new PickableAdapter(pickables, this);
-                rvPickableListValues.setAdapter(adapter);
                 if (pickables.isEmpty()) {
                     llPickableList.setState(StateLayout.VIEW_EMPTY);
                 } else {
+                    adapter.submitList((List<Pickable>) pickables);
                     llPickableList.setState(StateLayout.VIEW_CONTENT);
                 }
             });
@@ -424,6 +426,7 @@ public class ValuePicker {
         private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
         private Provider provider;
+        private PickableAdapter adapter;
 
         public PickableBottomSheetDialogFragment() {
             setRetainInstance(true);
@@ -463,6 +466,12 @@ public class ValuePicker {
             etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
             rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
             etPickableListTitle = view.findViewById(R.id.etPickableListTitle);
+
+            // bind adapters
+            adapter = new PickableAdapter(this);
+            rvPickableListValues.setAdapter(adapter);
+
+            // return view
             return view;
         }
 
@@ -483,11 +492,10 @@ public class ValuePicker {
 
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
-                PickableAdapter adapter = new PickableAdapter(pickables, this);
-                rvPickableListValues.setAdapter(adapter);
                 if (pickables.isEmpty()) {
                     llPickableList.setState(StateLayout.VIEW_EMPTY);
                 } else {
+                    adapter.submitList((List<Pickable>) pickables);
                     llPickableList.setState(StateLayout.VIEW_CONTENT);
                 }
             });
