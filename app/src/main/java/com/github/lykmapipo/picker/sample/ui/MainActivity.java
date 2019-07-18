@@ -1,6 +1,7 @@
 package com.github.lykmapipo.picker.sample.ui;
 
 import android.os.Bundle;
+import android.os.Process;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.github.javafaker.Faker;
 import com.github.lykmapipo.picker.ValuePicker;
 import com.github.lykmapipo.picker.sample.R;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public List<? extends ValuePicker.Pickable> getValues() {
+            public Task<List<? extends ValuePicker.Pickable>> getValues() {
                 return getContactList();
             }
 
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public List<? extends ValuePicker.Pickable> getValues() {
+            public Task<List<? extends ValuePicker.Pickable>> getValues() {
                 return getContactList();
             }
 
@@ -79,18 +82,34 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private List<Contact> getContactList() {
-        List<Contact> contacts = new ArrayList<Contact>();
+    private Task<List<? extends ValuePicker.Pickable>> getContactList() {
+        final TaskCompletionSource<List<? extends ValuePicker.Pickable>> source =
+                new TaskCompletionSource<List<? extends ValuePicker.Pickable>>();
 
-        for (int i = 0; i < 10; i++) {
-            Faker faker = new Faker();
-            String name = faker.name().fullName();
-            String phone = faker.phoneNumber().phoneNumber();
-            Contact contact = new Contact(name, phone);
-            contacts.add(contact);
-        }
+        Thread fetch = new Thread(() -> {
+            // moves the current Thread into the background
+            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+            // execute task
+            try {
+                List<Contact> contacts = new ArrayList<Contact>();
 
-        return contacts;
+                for (int i = 0; i < 10; i++) {
+                    Faker faker = new Faker();
+                    String name = faker.name().fullName();
+                    String phone = faker.phoneNumber().phoneNumber();
+                    Contact contact = new Contact(name, phone);
+                    contacts.add(contact);
+                }
+                source.setResult(contacts);
+            } catch (Exception error) {
+                source.setException(error);
+            }
+        });
+        fetch.start();
+
+        // create get value task
+        Task<List<? extends ValuePicker.Pickable>> task = source.getTask();
+        return task;
     }
 
     class Contact implements ValuePicker.Pickable {

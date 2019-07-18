@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Process;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,6 @@ import com.github.lykmapipo.listview.adapter.DiffableListAdapter;
 import com.github.lykmapipo.listview.data.Diffable;
 import com.github.lykmapipo.listview.view.StateLayout;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
@@ -136,36 +134,6 @@ public class ValuePicker {
     }
 
     /**
-     * Wrap {@link Provider#getValues()} in background thread
-     *
-     * @param provider
-     * @return
-     * @since 0.1.0
-     */
-    private static Task<List<? extends Pickable>> wrapToTask(@NonNull Provider provider) {
-        final TaskCompletionSource<List<? extends Pickable>> source =
-                new TaskCompletionSource<List<? extends Pickable>>();
-
-        Thread fetch = new Thread(() -> {
-            // moves the current Thread into the background
-            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-            // execute task
-            try {
-                List<? extends Pickable> pickables = provider.getValues();
-                // TODO for each pickable item ensure drawable avatar
-                source.setResult(pickables);
-            } catch (Exception error) {
-                source.setException(error);
-            }
-        });
-        fetch.start();
-
-        // create get value task
-        Task<List<? extends Pickable>> task = source.getTask();
-        return task;
-    }
-
-    /**
      * Interface definition for a pickable value
      *
      * @since 0.1.0
@@ -219,7 +187,7 @@ public class ValuePicker {
          *
          * @return
          */
-        List<? extends Pickable> getValues(); // TODO use Task<List<? extends Pickable>> load(Query query) with search and paging
+        Task<List<? extends Pickable>> getValues(); // TODO use Task<List<? extends Pickable>> load(Query query) with search and paging
 
         /**
          * {@link Pickable} selection listener
@@ -367,7 +335,7 @@ public class ValuePicker {
             etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
-            Task<List<? extends Pickable>> task = wrapToTask(provider);
+            Task<List<? extends Pickable>> task = provider.getValues();
 
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
@@ -478,7 +446,7 @@ public class ValuePicker {
             etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
-            Task<List<? extends Pickable>> task = wrapToTask(provider);
+            Task<List<? extends Pickable>> task = provider.getValues();
 
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
