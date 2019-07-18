@@ -340,10 +340,6 @@ public class ValuePicker {
             View view = inflater.inflate(R.layout.list_pickable, container, false);
             // setup state layout
             llPickableList = (StateLayout) view;
-            llPickableList.setContentViewResId(R.id.v_content);
-            llPickableList.setErrorViewResId(R.id.v_error);
-            llPickableList.setEmptyViewResId(R.id.v_empty);
-            llPickableList.setLoadingViewResId(R.id.v_loading);
 
             // obtain required views
             etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
@@ -376,15 +372,15 @@ public class ValuePicker {
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
                 if (pickables.isEmpty()) {
-                    llPickableList.setState(StateLayout.VIEW_EMPTY);
+                    llPickableList.showEmpty();
                 } else {
                     adapter.submitList((List<Pickable>) pickables);
-                    llPickableList.setState(StateLayout.VIEW_CONTENT);
+                    llPickableList.showContent();
                 }
             });
 
             // handle load error
-            task.addOnFailureListener(getActivity(), e -> llPickableList.setState(StateLayout.VIEW_ERROR));
+            task.addOnFailureListener(getActivity(), e -> llPickableList.showError());
         }
 
         @Override
@@ -455,10 +451,6 @@ public class ValuePicker {
             View view = inflater.inflate(R.layout.list_pickable, container, false);
             // setup state layout
             llPickableList = (StateLayout) view;
-            llPickableList.setContentViewResId(R.id.v_content);
-            llPickableList.setErrorViewResId(R.id.v_error);
-            llPickableList.setEmptyViewResId(R.id.v_empty);
-            llPickableList.setLoadingViewResId(R.id.v_loading);
 
             // obtain required views
             etPickableListSearch = view.findViewById(R.id.etPickableListSearch);
@@ -491,15 +483,15 @@ public class ValuePicker {
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
                 if (pickables.isEmpty()) {
-                    llPickableList.setState(StateLayout.VIEW_EMPTY);
+                    llPickableList.showEmpty();
                 } else {
                     adapter.submitList((List<Pickable>) pickables);
-                    llPickableList.setState(StateLayout.VIEW_CONTENT);
+                    llPickableList.showContent();
                 }
             });
 
             // handle load error
-            task.addOnFailureListener(getActivity(), e -> llPickableList.setState(StateLayout.VIEW_ERROR));
+            task.addOnFailureListener(getActivity(), e -> llPickableList.showError());
         }
 
         @Override

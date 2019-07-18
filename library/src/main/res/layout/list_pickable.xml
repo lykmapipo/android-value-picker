@@ -11,16 +11,4 @@
         android:id="@+id/v_content"
         layout="@layout/content_pickable" />
 
-    <include
-        android:id="@+id/v_empty"
-        layout="@layout/state_empty" />
-
-    <include
-        android:id="@+id/v_error"
-        layout="@layout/state_empty" />
-
-    <include
-        android:id="@+id/v_loading"
-        layout="@layout/state_loading" />
-
 </com.github.lykmapipo.listview.view.StateLayout>
