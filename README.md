@@ -18,7 +18,7 @@ add `android-value-picker` dependency into your project
 
 ```gradle
 dependencies {
-    compile 'com.github.lykmapipo:android-value-picker:v0.1.1'
+    implementation 'com.github.lykmapipo:android-value-picker:v0.1.1'
 }
 ```
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public List<? extends ValuePicker.Pickable> getValues() {
+            public Task<List<? extends ValuePicker.Pickable>> getValues() {
                 return getContactList();
             }
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public List<? extends ValuePicker.Pickable> getValues() {
+            public Task<List<? extends ValuePicker.Pickable>> getValues() {
                 return getContactList();
             }
 
