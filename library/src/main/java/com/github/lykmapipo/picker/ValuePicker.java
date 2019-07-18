@@ -42,6 +42,7 @@ import java.util.List;
  */
 public class ValuePicker {
     // TODO explore material dialog layout to improve UI/UX
+
     /**
      * Default color generator
      *
@@ -145,19 +146,16 @@ public class ValuePicker {
         final TaskCompletionSource<List<? extends Pickable>> source =
                 new TaskCompletionSource<List<? extends Pickable>>();
 
-        Thread fetch = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // moves the current Thread into the background
-                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-                // execute task
-                try {
-                    List<? extends Pickable> pickables = provider.getValues();
-                    // TODO for each pickable item ensure drawable avatar
-                    source.setResult(pickables);
-                } catch (Exception error) {
-                    source.setException(error);
-                }
+        Thread fetch = new Thread(() -> {
+            // moves the current Thread into the background
+            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+            // execute task
+            try {
+                List<? extends Pickable> pickables = provider.getValues();
+                // TODO for each pickable item ensure drawable avatar
+                source.setResult(pickables);
+            } catch (Exception error) {
+                source.setException(error);
             }
         });
         fetch.start();
@@ -221,7 +219,7 @@ public class ValuePicker {
          *
          * @return
          */
-        List<? extends Pickable> getValues(); // TODO use load(Query query) with search and paging
+        List<? extends Pickable> getValues(); // TODO use Task<List<? extends Pickable>> load(Query query) with search and paging
 
         /**
          * {@link Pickable} selection listener

@@ -32,13 +32,13 @@ dependencies {
 
     //androidx dependencies
     api "androidx.annotation:annotation:${ANDROIDX_ANNOTATION_VERSION}"
-    implementation "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPACT_VERSION}"
+    api "androidx.appcompat:appcompat:${ANDROIDX_APPCOMPACT_VERSION}"
     api "com.google.android.material:material:${MATERIAL_COMPONENTS_VERSION}"
 
     // misc dependencies
-    implementation "com.google.android.gms:play-services-tasks:${PLAY_SERVICES_TASKS_VERSION}"
-    implementation "blue.aodev:material-values:${MATERIAL_VALUES_VERSION}"
-    implementation "com.amulyakhare:com.amulyakhare.textdrawable:${TEXTDRAWABLE_VERSION}"
+    api "com.google.android.gms:play-services-tasks:${PLAY_SERVICES_TASKS_VERSION}"
+    api "blue.aodev:material-values:${MATERIAL_VALUES_VERSION}"
+    api "com.amulyakhare:com.amulyakhare.textdrawable:${TEXTDRAWABLE_VERSION}"
     api "com.github.lykmapipo:android-listview:${ANDROID_LISTVIEW_VERSION}"
 
     //test dependencies
