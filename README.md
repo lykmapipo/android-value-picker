@@ -18,7 +18,7 @@ add `android-value-picker` dependency into your project
 
 ```gradle
 dependencies {
-    implementation 'com.github.lykmapipo:android-value-picker:v0.2.0'
+    implementation 'com.github.lykmapipo:android-value-picker:v0.3.0'
 }
 ```
 
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         // show dialog value picker
         Button btnDialogPicker = findViewById(R.id.btnDialogPicker);
-        btnDialogPicker.setOnClickListener(v -> ValuePicker.dialogPickerFor(this, new ValuePicker.Provider() {
+        btnDialogPicker.setOnClickListener(v -> ValuePicker.dialogPickerFor(this, new ValuePicker.Provider<Contact>() {
             @Override
             public String getTitle() {
                 return "Select Contact";
@@ -50,39 +50,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public Task<List<? extends ValuePicker.Pickable>> getValues() {
+            public Task<List<Contact>> getValues() {
                 return getContactList();
             }
 
             @Override
-            public void onValueSelected(ValuePicker.Pickable pickable) {
-                Toast.makeText(MainActivity.this, "Picked: " + pickable, Toast.LENGTH_SHORT).show();
+            public void onValueSelected(Contact picked) {
+                Toast.makeText(MainActivity.this, "Picked: " + picked, Toast.LENGTH_SHORT).show();
             }
         }));
 
-        // show bottom sheet value picker
-        Button btnBottomSheetPicker = findViewById(R.id.btnBottomSheetPicker);
-        btnBottomSheetPicker.setOnClickListener(v -> ValuePicker.bottomPickerFor(this, new ValuePicker.Provider() {
-            @Override
-            public String getTitle() {
-                return "Select Contact";
-            }
-
-            @Override
-            public String getSearchHint() {
-                return "Search...";
-            }
-
-            @Override
-            public Task<List<? extends ValuePicker.Pickable>> getValues() {
-                return getContactList();
-            }
-
-            @Override
-            public void onValueSelected(ValuePicker.Pickable pickable) {
-                Toast.makeText(MainActivity.this, "Picked: " + pickable, Toast.LENGTH_SHORT).show();
-            }
-        }));
     }
 
     @Override
