@@ -202,7 +202,7 @@ public class ValuePicker {
      *
      * @since 0.1.0
      */
-    static class PickableAdapter extends DiffableListAdapter<Pickable, PickableAdapter.PickableViewHolder> {
+    public static class PickableAdapter extends DiffableListAdapter<Pickable, PickableAdapter.PickableViewHolder> {
         private OnClickListener listener;
 
         public PickableAdapter(@NonNull OnClickListener listener) {
@@ -272,7 +272,7 @@ public class ValuePicker {
     /**
      * {@link DialogFragment} for {@link Pickable} values
      */
-    static class PickableDialogFragment extends DialogFragment
+    public static class PickableDialogFragment extends DialogFragment
             implements OnClickListener {
         public static final String TAG = PickableDialogFragment.class.getSimpleName();
 
@@ -379,7 +379,7 @@ public class ValuePicker {
     /**
      * {@link BottomSheetDialogFragment} for {@link Pickable} values
      */
-    static class PickableBottomSheetDialogFragment extends BottomSheetDialogFragment
+    public static class PickableBottomSheetDialogFragment extends BottomSheetDialogFragment
             implements OnClickListener {
         public static final String TAG = PickableBottomSheetDialogFragment.class.getSimpleName();
 
