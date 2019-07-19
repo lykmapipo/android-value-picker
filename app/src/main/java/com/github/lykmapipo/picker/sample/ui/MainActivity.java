@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         // show dialog value picker
         Button btnDialogPicker = findViewById(R.id.btnDialogPicker);
-        btnDialogPicker.setOnClickListener(v -> ValuePicker.dialogPickerFor(this, new ValuePicker.Provider() {
+        btnDialogPicker.setOnClickListener(v -> ValuePicker.dialogPickerFor(this, new ValuePicker.Provider<Contact>() {
             @Override
             public String getTitle() {
                 return "Select Contact";
@@ -42,19 +42,19 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public Task<List<? extends ValuePicker.Pickable>> getValues() {
+            public Task<List<Contact>> getValues() {
                 return getContactList();
             }
 
             @Override
-            public void onValueSelected(ValuePicker.Pickable pickable) {
-                Toast.makeText(MainActivity.this, "Picked: " + pickable, Toast.LENGTH_SHORT).show();
+            public void onValueSelected(Contact picked) {
+                Toast.makeText(MainActivity.this, "Picked: " + picked, Toast.LENGTH_SHORT).show();
             }
         }));
 
         // show bottom sheet value picker
         Button btnBottomSheetPicker = findViewById(R.id.btnBottomSheetPicker);
-        btnBottomSheetPicker.setOnClickListener(v -> ValuePicker.bottomPickerFor(this, new ValuePicker.Provider() {
+        btnBottomSheetPicker.setOnClickListener(v -> ValuePicker.bottomPickerFor(this, new ValuePicker.Provider<Contact>() {
             @Override
             public String getTitle() {
                 return "Select Contact";
@@ -66,13 +66,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public Task<List<? extends ValuePicker.Pickable>> getValues() {
+            public Task<List<Contact>> getValues() {
                 return getContactList();
             }
 
             @Override
-            public void onValueSelected(ValuePicker.Pickable pickable) {
-                Toast.makeText(MainActivity.this, "Picked: " + pickable, Toast.LENGTH_SHORT).show();
+            public void onValueSelected(Contact picked) {
+                Toast.makeText(MainActivity.this, "Picked: " + picked, Toast.LENGTH_SHORT).show();
             }
         }));
     }
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    private Task<List<? extends ValuePicker.Pickable>> getContactList() {
-        final TaskCompletionSource<List<? extends ValuePicker.Pickable>> source =
-                new TaskCompletionSource<List<? extends ValuePicker.Pickable>>();
+    private Task<List<Contact>> getContactList() {
+        final TaskCompletionSource<List<Contact>> source =
+                new TaskCompletionSource<List<Contact>>();
 
         Thread fetch = new Thread(() -> {
             // moves the current Thread into the background
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         fetch.start();
 
         // create get value task
-        Task<List<? extends ValuePicker.Pickable>> task = source.getTask();
+        Task<List<Contact>> task = source.getTask();
         return task;
     }
 

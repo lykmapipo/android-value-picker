@@ -167,7 +167,7 @@ public class ValuePicker {
      *
      * @since 0.1.0
      */
-    public interface Provider {
+    public interface Provider<T extends Pickable> {
         /**
          * {@link Pickable} header
          *
@@ -187,14 +187,14 @@ public class ValuePicker {
          *
          * @return
          */
-        Task<List<? extends Pickable>> getValues(); // TODO use Task<List<? extends Pickable>> load(Query query) with search and paging
+        Task<List<T>> getValues(); // TODO use Task<List<Pickable>> load(Query query) with search and paging
 
         /**
          * {@link Pickable} selection listener
          *
          * @param pickable
          */
-        void onValueSelected(Pickable pickable);
+        void onValueSelected(T pickable);
     }
 
     /**
@@ -335,14 +335,14 @@ public class ValuePicker {
             etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
-            Task<List<? extends Pickable>> task = provider.getValues();
+            Task<List<Pickable>> task = provider.getValues();
 
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
                 if (pickables.isEmpty()) {
                     llPickableList.showEmpty();
                 } else {
-                    adapter.submitList((List<Pickable>) pickables);
+                    adapter.submitList(pickables);
                     llPickableList.showContent();
                 }
             });
@@ -446,14 +446,14 @@ public class ValuePicker {
             etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
-            Task<List<? extends Pickable>> task = provider.getValues();
+            Task<List<Pickable>> task = provider.getValues();
 
             // handle loading states
             task.addOnSuccessListener(getActivity(), pickables -> {
                 if (pickables.isEmpty()) {
                     llPickableList.showEmpty();
                 } else {
-                    adapter.submitList((List<Pickable>) pickables);
+                    adapter.submitList(pickables);
                     llPickableList.showContent();
                 }
             });
