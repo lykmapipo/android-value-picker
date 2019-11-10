@@ -378,6 +378,12 @@ public class ValuePicker {
         }
 
         @Override
+        public void onPause() {
+            dismissKeyboard(svPickableListSearch);
+            super.onPause();
+        }
+
+        @Override
         public void onClick(Pickable pickable) {
             dismiss();
             if (provider != null) {
@@ -385,13 +391,10 @@ public class ValuePicker {
             }
         }
 
-        @Override
-        public void onPause() {
-            dismissKeyboard(svPickableListSearch);
-            super.onPause();
-        }
-
         private void search() {
+            // show loading
+            // llPickableList.showLoading();
+
             // bind recycler adapter & values
             Task<List<Pickable>> task = provider.getValues(query);
 
@@ -414,14 +417,16 @@ public class ValuePicker {
         }
 
         private void showKeyboard(View view) {
-            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm =
+                    (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null) {
                 imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
             }
         }
 
         private void dismissKeyboard(View view) {
-            InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm =
+                    (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             if (imm != null) {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
@@ -468,8 +473,12 @@ public class ValuePicker {
 
         @Nullable
         @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        public View onCreateView(
+                @NonNull LayoutInflater inflater,
+                @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            // inflate
             View view = inflater.inflate(R.layout.list_pickable, container, false);
+
             // setup state layout
             llPickableList = (StateLayout) view;
 
@@ -489,7 +498,31 @@ public class ValuePicker {
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-            // TODO bind search listener
+
+            // Set SearchView QueryTextListener
+            svPickableListSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    dismissKeyboard(svPickableListSearch);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    if (!Common.Strings.isEmpty(newText)) {
+                        query = Query.create(newText);
+                        search();
+                    }
+                    return true;
+                }
+            });
+
+            // Set focus on the SearchView and open the keyboard
+            svPickableListSearch.setOnQueryTextFocusChangeListener((view, hasFocus) -> {
+                if (hasFocus) {
+                    showKeyboard(view.findFocus());
+                }
+            });
 
             // set title
             String title = provider.getTitle();
@@ -497,6 +530,28 @@ public class ValuePicker {
                 title = getString(R.string.text_pickable_list_title);
             }
             etPickableListTitle.setText(title);
+
+            // bind recycler adapter & values
+            search();
+        }
+
+        @Override
+        public void onPause() {
+            dismissKeyboard(svPickableListSearch);
+            super.onPause();
+        }
+
+        @Override
+        public void onClick(Pickable pickable) {
+            dismiss();
+            if (provider != null) {
+                provider.onValueSelected(pickable);
+            }
+        }
+
+        private void search() {
+            // show loading
+            // llPickableList.showLoading();
 
             // bind recycler adapter & values
             Task<List<Pickable>> task = provider.getValues(query);
@@ -515,16 +570,24 @@ public class ValuePicker {
             task.addOnFailureListener(requireActivity(), e -> llPickableList.showError());
         }
 
-        @Override
-        public void onClick(Pickable pickable) {
-            dismiss();
-            if (provider != null) {
-                provider.onValueSelected(pickable);
+        public void setProvider(Provider provider) {
+            this.provider = provider;
+        }
+
+        private void showKeyboard(View view) {
+            InputMethodManager imm =
+                    (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
             }
         }
 
-        public void setProvider(Provider provider) {
-            this.provider = provider;
+        private void dismissKeyboard(View view) {
+            InputMethodManager imm =
+                    (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
 
     }
