@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.DialogFragment;
@@ -23,8 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
-import com.github.lykmapipo.listview.adapter.DiffableListAdapter;
-import com.github.lykmapipo.listview.data.Diffable;
+import com.github.lykmapipo.common.Common;
+import com.github.lykmapipo.common.data.Diffable;
+import com.github.lykmapipo.common.data.Query;
+import com.github.lykmapipo.common.widget.recyclerview.DiffableListAdapter;
 import com.github.lykmapipo.listview.view.StateLayout;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -58,7 +60,7 @@ public class ValuePicker {
     public static synchronized void dialogPickerFor(
             @NonNull Fragment fragment,
             @NonNull Provider provider) {
-        dialogPickerFor(fragment.getActivity(), provider);
+        dialogPickerFor(fragment.requireActivity(), provider);
     }
 
     /**
@@ -91,7 +93,7 @@ public class ValuePicker {
     public static synchronized void bottomPickerFor(
             @NonNull Fragment fragment,
             @NonNull Provider provider) {
-        bottomPickerFor(fragment.getActivity(), provider);
+        bottomPickerFor(fragment.requireActivity(), provider);
     }
 
     /**
@@ -140,9 +142,6 @@ public class ValuePicker {
      */
     public interface Pickable extends Diffable {
         @NonNull
-        String getId();
-
-        @NonNull
         String getName();
 
         @Nullable
@@ -187,7 +186,7 @@ public class ValuePicker {
          *
          * @return
          */
-        Task<List<T>> getValues(); // TODO use Task<List<Pickable>> load(Query query) with search and paging
+        Task<List<T>> getValues(@NonNull Query query);
 
         /**
          * {@link Pickable} selection listener
@@ -277,9 +276,10 @@ public class ValuePicker {
         public static final String TAG = PickableDialogFragment.class.getSimpleName();
 
         private StateLayout llPickableList;
-        private AppCompatEditText etPickableListSearch;
+        private SearchView etPickableListSearch;
         private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
+        private Query query;
         private Provider provider;
         private PickableAdapter adapter;
 
@@ -329,16 +329,16 @@ public class ValuePicker {
 
             // set title
             String title = provider.getTitle();
-            if (TextUtils.isEmpty(title)) {
+            if (Common.Strings.isEmpty(title)) {
                 title = getString(R.string.text_pickable_list_title);
             }
             etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
-            Task<List<Pickable>> task = provider.getValues();
+            Task<List<Pickable>> task = provider.getValues(query);
 
             // handle loading states
-            task.addOnSuccessListener(getActivity(), pickables -> {
+            task.addOnSuccessListener(requireActivity(), pickables -> {
                 if (pickables.isEmpty()) {
                     llPickableList.showEmpty();
                 } else {
@@ -348,7 +348,7 @@ public class ValuePicker {
             });
 
             // handle load error
-            task.addOnFailureListener(getActivity(), e -> llPickableList.showError());
+            task.addOnFailureListener(requireActivity(), e -> llPickableList.showError());
         }
 
         @Override
@@ -384,9 +384,10 @@ public class ValuePicker {
         public static final String TAG = PickableBottomSheetDialogFragment.class.getSimpleName();
 
         private StateLayout llPickableList;
-        private AppCompatEditText etPickableListSearch;
+        private SearchView etPickableListSearch;
         private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
+        private Query query;
         private Provider provider;
         private PickableAdapter adapter;
 
@@ -440,16 +441,16 @@ public class ValuePicker {
 
             // set title
             String title = provider.getTitle();
-            if (TextUtils.isEmpty(title)) {
+            if (Common.Strings.isEmpty(title)) {
                 title = getString(R.string.text_pickable_list_title);
             }
             etPickableListTitle.setText(title);
 
             // bind recycler adapter & values
-            Task<List<Pickable>> task = provider.getValues();
+            Task<List<Pickable>> task = provider.getValues(query);
 
             // handle loading states
-            task.addOnSuccessListener(getActivity(), pickables -> {
+            task.addOnSuccessListener(requireActivity(), pickables -> {
                 if (pickables.isEmpty()) {
                     llPickableList.showEmpty();
                 } else {
@@ -459,7 +460,7 @@ public class ValuePicker {
             });
 
             // handle load error
-            task.addOnFailureListener(getActivity(), e -> llPickableList.showError());
+            task.addOnFailureListener(requireActivity(), e -> llPickableList.showError());
         }
 
         @Override

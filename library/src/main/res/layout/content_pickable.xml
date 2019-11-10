@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:padding="@dimen/material_baseline_grid_2x">
 
@@ -16,14 +17,16 @@
         android:layout_marginBottom="@dimen/material_baseline_grid_1.5x"
         android:text="@string/text_pickable_list_title" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <SearchView
         android:id="@+id/etPickableListSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hint_list_values_search"
-        android:singleLine="true"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:iconifiedByDefault="false"
+        android:queryBackground="@color/transparent"
+        android:queryHint="@string/hint_list_values_search"
+        android:searchHintIcon="@null"
+        android:searchIcon="@null"
+        tools:targetApi="lollipop_mr1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPickableListValues"

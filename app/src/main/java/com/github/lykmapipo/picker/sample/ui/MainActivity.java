@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.javafaker.Faker;
+import com.github.lykmapipo.common.data.Query;
 import com.github.lykmapipo.picker.ValuePicker;
 import com.github.lykmapipo.picker.sample.R;
 import com.google.android.gms.tasks.Task;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public Task<List<Contact>> getValues() {
+            public Task<List<Contact>> getValues(@NonNull Query query) {
                 return getContactList();
             }
 
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public Task<List<Contact>> getValues() {
+            public Task<List<Contact>> getValues(@NonNull Query query) {
                 return getContactList();
             }
 
@@ -123,12 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
         @NonNull
         @Override
-        public String getId() {
-            return phone;
-        }
-
-        @NonNull
-        @Override
         public String getName() {
             return name;
         }
@@ -151,6 +146,18 @@ public class MainActivity extends AppCompatActivity {
                     "name='" + name + '\'' +
                     ", phone='" + phone + '\'' +
                     '}';
+        }
+
+        /**
+         * Obtain valid stable id for the diffable item
+         *
+         * @return object id
+         * @since 0.1.0
+         */
+        @NonNull
+        @Override
+        public String getObjectId() {
+            return phone;
         }
     }
 }
