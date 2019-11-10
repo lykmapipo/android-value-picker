@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public String getSearchHint() {
-                return "Search...";
+                return "Search Contacts...";
             }
 
             @Override
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public String getSearchHint() {
-                return "Search...";
+                return "Search Contacts...";
             }
 
             @Override

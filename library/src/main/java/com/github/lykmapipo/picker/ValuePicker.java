@@ -276,11 +276,11 @@ public class ValuePicker {
             implements OnClickListener {
         public static final String TAG = PickableDialogFragment.class.getSimpleName();
 
-        private StateLayout llPickableList;
+        private StateLayout slPickableList;
         private SearchView svPickableListSearch;
         private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
-        private Query query;
+        private Query query = Query.create();
         private Provider provider;
         private PickableAdapter adapter;
 
@@ -310,11 +310,11 @@ public class ValuePicker {
             View view = inflater.inflate(R.layout.list_pickable, container, false);
 
             // setup state layout
-            llPickableList = (StateLayout) view;
+            slPickableList = view.findViewById(R.id.slPickableList);
 
             // obtain required views
             svPickableListSearch = view.findViewById(R.id.svPickableListSearch);
-            rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
+            rvPickableListValues = view.findViewById(R.id.content_pickable);
             etPickableListTitle = view.findViewById(R.id.etPickableListTitle);
 
             // bind adapters
@@ -329,20 +329,27 @@ public class ValuePicker {
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
+            // set search hint
+            String searchHint = provider.getSearchHint();
+            if (Common.Strings.isEmpty(searchHint)) {
+                searchHint = getString(R.string.hint_list_values_search);
+            }
+            svPickableListSearch.setQueryHint(searchHint);
+
             // Set SearchView QueryTextListener
             svPickableListSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
-                public boolean onQueryTextSubmit(String query) {
+                public boolean onQueryTextSubmit(String q) {
                     dismissKeyboard(svPickableListSearch);
+                    query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
+                    search();
                     return true;
                 }
 
                 @Override
-                public boolean onQueryTextChange(String newText) {
-                    if (!Common.Strings.isEmpty(newText)) {
-                        query = Query.create(newText);
-                        search();
-                    }
+                public boolean onQueryTextChange(String q) {
+                    query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
+                    search();
                     return true;
                 }
             });
@@ -393,7 +400,7 @@ public class ValuePicker {
 
         private void search() {
             // show loading
-            // llPickableList.showLoading();
+            slPickableList.showLoading();
 
             // bind recycler adapter & values
             Task<List<Pickable>> task = provider.getValues(query);
@@ -401,15 +408,15 @@ public class ValuePicker {
             // handle loading states
             task.addOnSuccessListener(requireActivity(), pickables -> {
                 if (pickables.isEmpty()) {
-                    llPickableList.showEmpty();
+                    slPickableList.showEmpty();
                 } else {
                     adapter.submitList(pickables);
-                    llPickableList.showContent();
+                    slPickableList.showContent();
                 }
             });
 
             // handle load error
-            task.addOnFailureListener(requireActivity(), e -> llPickableList.showError());
+            task.addOnFailureListener(requireActivity(), e -> slPickableList.showError());
         }
 
         public void setProvider(Provider provider) {
@@ -440,11 +447,11 @@ public class ValuePicker {
             implements OnClickListener {
         public static final String TAG = PickableBottomSheetDialogFragment.class.getSimpleName();
 
-        private StateLayout llPickableList;
+        private StateLayout slPickableList;
         private SearchView svPickableListSearch;
         private AppCompatTextView etPickableListTitle;
         private RecyclerView rvPickableListValues;
-        private Query query;
+        private Query query = Query.create();
         private Provider provider;
         private PickableAdapter adapter;
 
@@ -480,11 +487,11 @@ public class ValuePicker {
             View view = inflater.inflate(R.layout.list_pickable, container, false);
 
             // setup state layout
-            llPickableList = (StateLayout) view;
+            slPickableList = view.findViewById(R.id.slPickableList);
 
             // obtain required views
             svPickableListSearch = view.findViewById(R.id.svPickableListSearch);
-            rvPickableListValues = view.findViewById(R.id.rvPickableListValues);
+            rvPickableListValues = view.findViewById(R.id.content_pickable);
             etPickableListTitle = view.findViewById(R.id.etPickableListTitle);
 
             // bind adapters
@@ -499,20 +506,27 @@ public class ValuePicker {
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
+            // set search hint
+            String searchHint = provider.getSearchHint();
+            if (Common.Strings.isEmpty(searchHint)) {
+                searchHint = getString(R.string.hint_list_values_search);
+            }
+            svPickableListSearch.setQueryHint(searchHint);
+
             // Set SearchView QueryTextListener
             svPickableListSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
-                public boolean onQueryTextSubmit(String query) {
+                public boolean onQueryTextSubmit(String q) {
                     dismissKeyboard(svPickableListSearch);
+                    query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
+                    search();
                     return true;
                 }
 
                 @Override
-                public boolean onQueryTextChange(String newText) {
-                    if (!Common.Strings.isEmpty(newText)) {
-                        query = Query.create(newText);
-                        search();
-                    }
+                public boolean onQueryTextChange(String q) {
+                    query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
+                    search();
                     return true;
                 }
             });
@@ -551,7 +565,7 @@ public class ValuePicker {
 
         private void search() {
             // show loading
-            // llPickableList.showLoading();
+            slPickableList.showLoading();
 
             // bind recycler adapter & values
             Task<List<Pickable>> task = provider.getValues(query);
@@ -559,15 +573,15 @@ public class ValuePicker {
             // handle loading states
             task.addOnSuccessListener(requireActivity(), pickables -> {
                 if (pickables.isEmpty()) {
-                    llPickableList.showEmpty();
+                    slPickableList.showEmpty();
                 } else {
                     adapter.submitList(pickables);
-                    llPickableList.showContent();
+                    slPickableList.showContent();
                 }
             });
 
             // handle load error
-            task.addOnFailureListener(requireActivity(), e -> llPickableList.showError());
+            task.addOnFailureListener(requireActivity(), e -> slPickableList.showError());
         }
 
         public void setProvider(Provider provider) {
