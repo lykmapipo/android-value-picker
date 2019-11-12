@@ -18,7 +18,7 @@ add `android-value-picker` dependency into your project
 
 ```gradle
 dependencies {
-    implementation 'com.github.lykmapipo:android-value-picker:v0.5.0'
+    implementation 'com.github.lykmapipo:android-value-picker:v0.6.0'
 }
 ```
 
