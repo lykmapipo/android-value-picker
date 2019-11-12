@@ -42,11 +42,13 @@ public class MainActivity extends AppCompatActivity {
                 return "Search Contacts...";
             }
 
+            @NonNull
             @Override
             public Task<List<Contact>> getValues(@NonNull Query query) {
                 return getContactList();
             }
 
+            @NonNull
             @Override
             public void onValueSelected(Contact picked) {
                 Toast.makeText(MainActivity.this, "Picked: " + picked, Toast.LENGTH_SHORT).show();
@@ -66,11 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 return "Search Contacts...";
             }
 
+            @NonNull
             @Override
             public Task<List<Contact>> getValues(@NonNull Query query) {
                 return getContactList();
             }
 
+            @NonNull
             @Override
             public void onValueSelected(Contact picked) {
                 Toast.makeText(MainActivity.this, "Picked: " + picked, Toast.LENGTH_SHORT).show();

@@ -2,9 +2,7 @@ package com.github.lykmapipo.picker;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.github.lykmapipo.common.Common;
 import com.github.lykmapipo.common.data.Diffable;
 import com.github.lykmapipo.common.data.Query;
@@ -42,14 +39,6 @@ import java.util.List;
  * @since 0.1.0
  */
 public class ValuePicker {
-    // TODO explore material dialog layout to improve UI/UX
-
-    /**
-     * Default color generator
-     *
-     * @since 0.1.0
-     */
-    private static final ColorGenerator colorGenerator = ColorGenerator.MATERIAL;
 
     /**
      * Launch dialog picker
@@ -118,25 +107,6 @@ public class ValuePicker {
     }
 
     /**
-     * Parse color from pickable
-     *
-     * @param pickable
-     * @return
-     */
-    private static int colorFor(@NonNull Pickable pickable) {
-        String color = pickable.getColor();
-        // try parse pickable color
-        try {
-            int parsedColor = Color.parseColor(color);
-            return parsedColor;
-        }
-        // return random material color
-        catch (Exception e) {
-            return colorGenerator.getRandomColor();
-        }
-    }
-
-    /**
      * Interface definition for a pickable value
      *
      * @since 0.1.0
@@ -187,6 +157,7 @@ public class ValuePicker {
          *
          * @return
          */
+        @NonNull
         Task<List<T>> getValues(@NonNull Query query);
 
         /**
@@ -194,6 +165,7 @@ public class ValuePicker {
          *
          * @param pickable
          */
+        @NonNull
         void onValueSelected(T pickable);
     }
 
@@ -245,17 +217,17 @@ public class ValuePicker {
                 String name = pickable.getName();
                 String description = pickable.getDescription();
                 String letter = String.valueOf(name.charAt(0));
-                int color = colorFor(pickable);
+                Integer color = Common.Colors.parseColor(pickable.getColor());
 
                 // set avatar
-                TextDrawable drawable = TextDrawable.builder().buildRound(letter, color);
+                TextDrawable drawable = Common.Drawables.letterAvatarFor(letter, color);
                 ivItemValueAvatar.setImageDrawable(drawable);
 
                 // set name
                 tvItemValueName.setText(name);
 
                 //set description
-                description = TextUtils.isEmpty(description) ? name : description;
+                description = Common.Strings.valueOr(description, name);
                 tvItemValueDescription.setText(description);
             }
 
