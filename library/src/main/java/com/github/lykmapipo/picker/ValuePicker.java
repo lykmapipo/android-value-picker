@@ -50,6 +50,7 @@ public class ValuePicker {
     public static synchronized void dialogPickerFor(
             @NonNull Fragment fragment,
             @NonNull Provider provider) {
+        // TODO: support empty state icon, title and description
         dialogPickerFor(fragment.requireActivity(), provider);
     }
 
@@ -63,6 +64,7 @@ public class ValuePicker {
     public static synchronized void dialogPickerFor(
             @NonNull FragmentActivity activity,
             @NonNull Provider provider) {
+        // TODO: support empty state icon, title and description
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         PickableDialogFragment picker =
                 (PickableDialogFragment) fragmentManager.findFragmentByTag(PickableDialogFragment.TAG);
@@ -364,6 +366,7 @@ public class ValuePicker {
 
         @Override
         public void onClick(Pickable pickable) {
+            dismissKeyboard(svPickableListSearch);
             dismiss();
             if (provider != null) {
                 provider.onValueSelected(pickable);
@@ -529,6 +532,7 @@ public class ValuePicker {
 
         @Override
         public void onClick(Pickable pickable) {
+            dismissKeyboard(svPickableListSearch);
             dismiss();
             if (provider != null) {
                 provider.onValueSelected(pickable);

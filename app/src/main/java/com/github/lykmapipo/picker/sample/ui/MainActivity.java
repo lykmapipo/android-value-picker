@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
             try {
                 List<Contact> contacts = new ArrayList<Contact>();
 
+                Faker faker = Faker.instance();
                 for (int i = 0; i < 10; i++) {
-                    Faker faker = new Faker();
                     String name = faker.name().fullName();
                     String phone = faker.phoneNumber().phoneNumber();
                     Contact contact = new Contact(name, phone);
