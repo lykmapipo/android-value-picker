@@ -18,7 +18,7 @@ add `android-value-picker` dependency into your project
 
 ```gradle
 dependencies {
-    implementation 'com.github.lykmapipo:android-value-picker:v0.6.0'
+    implementation 'com.github.lykmapipo:android-value-picker:v0.7.0'
 }
 ```
 
@@ -47,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public String getSearchHint() {
                 return "Search...";
+            }
+            
+            @Override
+            public int getThreshold() {
+                return 2;
             }
 
             @Override
