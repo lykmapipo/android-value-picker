@@ -155,6 +155,14 @@ public class ValuePicker {
         String getSearchHint();
 
         /**
+         * Specifies the minimum number of characters the user has to type before
+         * invoke search
+         *
+         * @return
+         */
+        int getThreshold();
+
+        /**
          * {@link Pickable} values
          *
          * @return
@@ -316,14 +324,18 @@ public class ValuePicker {
                 public boolean onQueryTextSubmit(String q) {
                     dismissKeyboard(svPickableListSearch);
                     query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
-                    search();
+                    if (q.length() >= provider.getThreshold()) {
+                        search();
+                    }
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String q) {
                     query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
-                    search();
+                    if (q.length() >= provider.getThreshold()) {
+                        search();
+                    }
                     return true;
                 }
             });
@@ -371,6 +383,7 @@ public class ValuePicker {
             if (provider != null) {
                 provider.onValueSelected(pickable);
             }
+            clear();
         }
 
         private void search() {
@@ -396,6 +409,11 @@ public class ValuePicker {
 
         public void setProvider(Provider provider) {
             this.provider = provider;
+        }
+
+        public void clear() {
+            query = null;
+            provider = null;
         }
 
         private void showKeyboard(View view) {
@@ -494,14 +512,18 @@ public class ValuePicker {
                 public boolean onQueryTextSubmit(String q) {
                     dismissKeyboard(svPickableListSearch);
                     query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
-                    search();
+                    if (q.length() >= provider.getThreshold()) {
+                        search();
+                    }
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String q) {
                     query = Common.Strings.isEmpty(q) ? Query.create() : Query.create(q);
-                    search();
+                    if (q.length() >= provider.getThreshold()) {
+                        search();
+                    }
                     return true;
                 }
             });
@@ -537,6 +559,7 @@ public class ValuePicker {
             if (provider != null) {
                 provider.onValueSelected(pickable);
             }
+            clear();
         }
 
         private void search() {
@@ -564,6 +587,11 @@ public class ValuePicker {
             this.provider = provider;
         }
 
+        public void clear() {
+            query = null;
+            provider = null;
+        }
+
         private void showKeyboard(View view) {
             InputMethodManager imm =
                     (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -580,5 +608,17 @@ public class ValuePicker {
             }
         }
 
+    }
+
+    /**
+     * Simple {@link Pickable} provider
+     *
+     * @since 0.7.0
+     */
+    public abstract static class SimpleProvider<T extends Pickable> implements Provider<T> {
+        @Override
+        public int getThreshold() {
+            return 1;
+        }
     }
 }

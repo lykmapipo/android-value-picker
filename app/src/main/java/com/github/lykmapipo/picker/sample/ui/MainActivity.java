@@ -42,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
                 return "Search Contacts...";
             }
 
+            @Override
+            public int getThreshold() {
+                return 2;
+            }
+
             @NonNull
             @Override
             public Task<List<Contact>> getValues(@NonNull Query query) {
@@ -57,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         // show bottom sheet value picker
         Button btnBottomSheetPicker = findViewById(R.id.btnBottomSheetPicker);
-        btnBottomSheetPicker.setOnClickListener(v -> ValuePicker.bottomPickerFor(this, new ValuePicker.Provider<Contact>() {
+        btnBottomSheetPicker.setOnClickListener(v -> ValuePicker.bottomPickerFor(this, new ValuePicker.SimpleProvider<Contact>() {
             @Override
             public String getTitle() {
                 return "Select Contact";
