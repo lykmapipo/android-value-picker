@@ -2,6 +2,7 @@ package com.github.lykmapipo.picker.sample.ui;
 
 import android.os.Bundle;
 import android.os.Process;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
             @NonNull
             @Override
             public Task<List<Contact>> getValues(@NonNull Query query) {
+                Log.d(MainActivity.TAG, "Query: " + query);
                 return getContactList();
             }
 
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @NonNull
             @Override
             public Task<List<Contact>> getValues(@NonNull Query query) {
+                Log.d(MainActivity.TAG, "Query: " + query);
                 return getContactList();
             }
 

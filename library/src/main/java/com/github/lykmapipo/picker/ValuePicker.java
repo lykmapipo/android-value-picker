@@ -421,7 +421,6 @@ public class ValuePicker {
 
         public void clear() {
             query = null;
-            provider = null;
         }
 
         private void showKeyboard(View view) {
@@ -597,7 +596,6 @@ public class ValuePicker {
 
         public void clear() {
             query = null;
-            provider = null;
         }
 
         private void showKeyboard(View view) {
