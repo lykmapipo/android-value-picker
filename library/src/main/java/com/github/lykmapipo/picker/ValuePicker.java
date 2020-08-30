@@ -416,11 +416,12 @@ public class ValuePicker {
         }
 
         public void setProvider(Provider provider) {
+            this.query = Query.create();
             this.provider = provider;
         }
 
         public void clear() {
-            query = null;
+            // TODO: implement
         }
 
         private void showKeyboard(View view) {
@@ -591,11 +592,12 @@ public class ValuePicker {
         }
 
         public void setProvider(Provider provider) {
+            this.query = Query.create();
             this.provider = provider;
         }
 
         public void clear() {
-            query = null;
+            // TODO: implement
         }
 
         private void showKeyboard(View view) {
