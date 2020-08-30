@@ -51,6 +51,10 @@ public class ValuePicker {
             @NonNull Fragment fragment,
             @NonNull Provider provider) {
         // TODO: support empty state icon, title and description
+        // TODO: support error state icon, title and description
+        // TODO: support infinity list
+        // TODO: support selection highlight
+        // TODO: support multi selections
         dialogPickerFor(fragment.requireActivity(), provider);
     }
 
@@ -65,6 +69,10 @@ public class ValuePicker {
             @NonNull FragmentActivity activity,
             @NonNull Provider provider) {
         // TODO: support empty state icon, title and description
+        // TODO: support error state icon, title and description
+        // TODO: support infinity list
+        // TODO: support selection highlight
+        // TODO: support multi selections
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
         PickableDialogFragment picker =
                 (PickableDialogFragment) fragmentManager.findFragmentByTag(PickableDialogFragment.TAG);
